@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Work Timer/ViewController.swift"
-            timestampString = "547692801.1514519"
+            timestampString = "547694932.29694"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "updateTimer()"
             landmarkType = "7">
          </BreakpointContent>

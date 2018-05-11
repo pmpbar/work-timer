@@ -12,15 +12,18 @@ class ViewController: NSViewController {
 
 
     @IBOutlet weak var timerLabel: NSTextField!
-    var seconds = 60 //This variable will hold a starting value of seconds. It could be any amount above 0.
+
+    var startingDuration = 5
+    var seconds = 0
     var timer = Timer()
-    var timerIsRunning = false //This will be used to make sure only one timer is created at a time.
+    var timerIsRunning = false
     var resumeClicked = false
     
     
     
     @IBAction func startButtonClicked(_ sender: Any) {
         if timerIsRunning == false {
+            seconds = startingDuration
             runTimer()
         }
     }
@@ -36,24 +39,42 @@ class ViewController: NSViewController {
 
     @IBAction func resetButtonClicked(_ sender: Any) {
         timer.invalidate()
-        seconds = 60    //Here we manually enter the restarting point for the seconds, but it would be wiser to make this a variable or constant.
+        seconds = startingDuration
         timerLabel.stringValue = timeString(time: TimeInterval(seconds))
         timerIsRunning = false
     }
     
     func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(ViewController.updateTimer)), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,
+                                     selector: (#selector(ViewController.updateTimer)),
+                                     userInfo: nil, repeats: true)
         timerIsRunning = true
     }
     @objc
     func updateTimer() {
         if seconds < 1 {
-         // alert
+            notifyCompletion()
+            timer.invalidate()
         } else {
-            seconds -= 1     //This will decrement(count down)the seconds.
-            timerLabel.stringValue = timeString(time: TimeInterval(seconds)) //This will update the label.
+            seconds -= 1
+            timerLabel.stringValue = timeString(time: TimeInterval(seconds))
         }
     }
+    
+    func notifyCompletion() {
+        // alert
+        let notification = NSUserNotification()
+        notification.identifier = "unique-id"
+        notification.title = "Timer Complete!"
+        notification.subtitle = "How did you do?"
+        notification.informativeText = "This is a test"
+        notification.soundName = NSUserNotificationDefaultSoundName
+        // notification.contentImage = NSImage(contentsOf: URL(string: "https://placehold.it/300")!)
+        // Manually display the notification
+        let notificationCenter = NSUserNotificationCenter.default
+        notificationCenter.deliver(notification)
+    }
+    
     func timeString(time:TimeInterval) -> String {
         let hours = Int(time) / 3600
         let minutes = Int(time) / 60 % 60
@@ -71,7 +92,7 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        timerLabel.stringValue = timeString(time: TimeInterval(startingDuration))
         // Do any additional setup after loading the view.
     }
     override var representedObject: Any? {
